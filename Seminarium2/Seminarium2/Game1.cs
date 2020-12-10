@@ -26,14 +26,12 @@ namespace Seminarium2
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             tank = Content.Load<Texture2D>("tank");
@@ -65,7 +63,6 @@ namespace Seminarium2
 
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
         protected override void Update(GameTime gameTime)
