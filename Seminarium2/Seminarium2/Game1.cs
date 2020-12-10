@@ -9,6 +9,11 @@ namespace Seminarium2
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Car car;
+        Texture2D tank;
+        Vector2 pos, vel;
+
+
 
         public Game1()
         {
@@ -28,7 +33,9 @@ namespace Seminarium2
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            tank = Content.Load<Texture2D>("tank");
+
+            car = new Car(tank, new Vector2(200,200), new Vector2(2,2));
         }
 
         protected override void UnloadContent()
@@ -41,7 +48,7 @@ namespace Seminarium2
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            car.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -50,7 +57,11 @@ namespace Seminarium2
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            car.Draw(spriteBatch);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

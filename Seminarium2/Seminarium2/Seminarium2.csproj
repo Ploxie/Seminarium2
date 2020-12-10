@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\tank.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
