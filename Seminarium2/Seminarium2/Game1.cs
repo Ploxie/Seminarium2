@@ -65,7 +65,7 @@ namespace Seminarium2
 
             radius = 50.0f;
             ballTex = CreateCircleTexture((int)radius, Color.White);
-            pos = new Vector2(50, 50); //Start position
+            pos = new Vector2(0, 400); //Start position
             vel = new Vector2(200, 3); //riktning
             ball = new Ball(ballTex, pos, vel, radius);
         }
@@ -116,6 +116,7 @@ namespace Seminarium2
             spriteBatch.Begin();
 
             car.Draw(spriteBatch);
+            ball.Draw(spriteBatch);
 
             spriteBatch.End();
 
