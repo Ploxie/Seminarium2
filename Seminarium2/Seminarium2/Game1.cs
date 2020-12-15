@@ -36,7 +36,6 @@ namespace Seminarium2
 
             tank = Content.Load<Texture2D>("tank");
 
-
             Func<Vector2, GameTime,float, Vector2> carPath = (position, gameTime, speed) => 
             {
                 float amplitude = 50.0f;
@@ -58,10 +57,6 @@ namespace Seminarium2
             };
 
             car = new Car(tank, Window, new Vector2(250, 250), carPath);
-        }
-
-        protected override void UnloadContent()
-        {
         }
 
         protected override void Update(GameTime gameTime)

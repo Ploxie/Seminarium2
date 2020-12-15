@@ -45,9 +45,9 @@ namespace Seminarium2
             //velocity = carPath(position, gameTime);
 
             //carRotation += (float)gameTime.ElapsedGameTime.TotalSeconds * speed; //?
+
             Vector2 newPos = carPath(startPosition, gameTime, 10.0f);
             velocity = (newPos - position);
-            //position = newPos; 
 
             carRotation = (float)Math.Atan2(position.Y - newPos.Y, position.X - newPos.X) + MathHelper.ToRadians(180);
 

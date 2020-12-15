@@ -10,32 +10,11 @@ namespace Seminarium2
 {
     class Ball
     {
-        private Vector2 position;
-        private Vector2 Position
-        {
-            get
-            {
-                return position;
-            }
-        }
-
         private Texture2D texture;
         private Vector2 velocity;
-        private Vector2 Velocity
-        {
-            get
-            {
-                return velocity;
-            }
-        }
+        private Vector2 position;
         private float radius;
-        private float Radius
-        {
-            get
-            {
-                return radius;
-            }
-        }
+
         public Ball(Vector2 position, Texture2D texture, Vector2 velocity, float radius)
         {
             this.position = position;
@@ -43,5 +22,30 @@ namespace Seminarium2
             this.velocity = velocity;
             this.radius = radius;
         }
+
+        public Vector2 Position
+        {
+            get
+            {
+                return position;
+            }
+        }
+
+        public Vector2 Velocity
+        {
+            get
+            {
+                return velocity;
+            }
+        }
+
+        public float Radius
+        {
+            get
+            {
+                return radius;
+            }
+        }
+
     }
 }
