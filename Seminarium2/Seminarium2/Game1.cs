@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 using System;
 
 namespace Seminarium2
@@ -16,8 +17,11 @@ namespace Seminarium2
         Vector2 pos, vel;
 
         Texture2D ballTex;
+        Texture2D lineTexture;
 
         float radius;
+
+        float angle;
 
 
         public Game1()
@@ -62,6 +66,7 @@ namespace Seminarium2
 
             car = new Car(tank, Window, new Vector2(100, 250), circlePath);
 
+            lineTexture = CreateLineTexture(3, 100, Color.Black);
 
             radius = 50.0f;
             ballTex = CreateCircleTexture((int)radius, Color.White);
@@ -99,10 +104,42 @@ namespace Seminarium2
             return texture;
         }
 
+        public Texture2D CreateLineTexture(int width, int height, Color color)
+        {
+            Texture2D texture = new Texture2D(GraphicsDevice, width, height);
+
+            Color[] colors = new Color[width * height];
+
+            for(int i = 0; i < width * height; i++)
+            {
+                colors[i] = Color.Transparent;
+            }
+
+            int middleX = width / 2;
+            int middleY = height / 2;
+
+            for (int y = 0; y < middleY; y++)
+            {
+                colors[y * width + middleX] = color;
+            }
+
+            texture.SetData(colors);
+
+            return texture;
+        }
+
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+
+            Vector2 bottomLeftCorner = new Vector2(0, Window.ClientBounds.Height);
+            Vector2 mousePosition = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+
+            angle = (float)Math.Atan2(mousePosition.Y - bottomLeftCorner.Y, mousePosition.X - bottomLeftCorner.X) + MathHelper.ToRadians(-90);
+
+
 
             car.Update(gameTime);
 
@@ -116,6 +153,8 @@ namespace Seminarium2
             spriteBatch.Begin();
 
             car.Draw(spriteBatch);
+
+            spriteBatch.Draw(lineTexture, new Rectangle(1, Window.ClientBounds.Height+1, 3, 100), null, Color.White, angle, new Vector2(0, 0f), SpriteEffects.None, 0.0f);
 
             spriteBatch.End();
 
