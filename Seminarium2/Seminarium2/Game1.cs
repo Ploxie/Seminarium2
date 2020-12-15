@@ -23,6 +23,8 @@ namespace Seminarium2
 
         Texture2D lineTexture;
 
+        bool hasShot;
+
         private static Vector2 mousePos;
         public static Vector2 MousePos
         {
@@ -92,13 +94,13 @@ namespace Seminarium2
             ballTex = CreateCircleTexture((int)radius, Color.White);
 
             boundary = new Point(bx - ballTex.Width, by - ballTex.Height);
-            pos = new Vector2(50, 480); //Start position
+            pos = new Vector2(radius * 0.5f, Window.ClientBounds.Height-(radius * 0.5f)); //Start position
             ballAngle = 30;
             velx = (float)Math.Cos(ballAngle) * ballVel.X;
             vely = (float)Math.Sin(ballAngle) * ballVel.Y;
             vel = new Vector2(velx, vely); //riktning
 
-            ball = new Ball(ballTex, pos, Vector2.Zero, radius, boundary);
+            ball = new Ball(ballTex, pos, Vector2.Zero, 300.0f, boundary);
 
         }
 
@@ -162,14 +164,19 @@ namespace Seminarium2
 
             Vector2 bottomLeftCorner = new Vector2(0, Window.ClientBounds.Height);
             Vector2 mousePosition = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
+            Vector2 direction = mousePosition - bottomLeftCorner;
+            direction.Normalize();
 
             angle = (float)Math.Atan2(mousePosition.Y - bottomLeftCorner.Y, mousePosition.X - bottomLeftCorner.X) + MathHelper.ToRadians(-90);
 
             car.Update(gameTime);
             ball.Update(gameTime);
 
-            if ((ms.LeftButton == ButtonState.Pressed))
-                ball.Velocity = new Vector2(3, 3);
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed && !hasShot)
+            {
+                ball.Velocity = direction;
+                hasShot = true;
+            }
 
             if (Vector2.Distance(ball.Position, car.Position) < (ball.Radius + car.Radius))
             {
@@ -188,7 +195,10 @@ namespace Seminarium2
             car.Draw(spriteBatch);
             ball.Draw(spriteBatch);
 
-            spriteBatch.Draw(lineTexture, new Rectangle(1, Window.ClientBounds.Height + 1, 3, 100), null, Color.White, angle, new Vector2(0, 0f), SpriteEffects.None, 0.0f);
+            if(!hasShot)
+            {
+                spriteBatch.Draw(lineTexture, new Rectangle((int)ball.Position.X, (int)ball.Position.Y, 3, 100), null, Color.White, angle, new Vector2(0, 0f), SpriteEffects.None, 0.0f);
+            }
 
             spriteBatch.End();
 
