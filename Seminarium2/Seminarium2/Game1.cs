@@ -14,17 +14,20 @@ namespace Seminarium2
         Ball ball;
         Texture2D tank;
         Vector2 pos, vel;
+        Point boundary;
+        int bx, by;
+
 
         Texture2D ballTex;
 
         float radius;
 
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-
+            bx = graphics.PreferredBackBufferWidth = 800;
+            by = graphics.PreferredBackBufferHeight = 600;
             IsMouseVisible = true;
         }
 
@@ -53,21 +56,21 @@ namespace Seminarium2
             Func<Vector2, GameTime,float, Vector2> circlePath = (position, gameTime, speed) =>
             {
                 float angle = MathHelper.ToRadians(10 * speed) * ((float)gameTime.TotalGameTime.TotalMilliseconds / 1000.0f);
-                float radius = 50.0f;
+                float radius = 100.0f;
 
                 Vector2 circle = new Vector2((float)Math.Cos(angle) * radius, (float)Math.Sin(angle) * radius);
 
                 return position + circle;
             };
 
-            car = new Car(tank, Window, new Vector2(100, 250), circlePath);
-
+            car = new Car(tank, Window, new Vector2(300, 250), circlePath);
 
             radius = 50.0f;
             ballTex = CreateCircleTexture((int)radius, Color.White);
-            pos = new Vector2(0, 400); //Start position
-            vel = new Vector2(200, 3); //riktning
-            ball = new Ball(ballTex, pos, vel, radius);
+            boundary = new Point(bx - ballTex.Width, by - ballTex.Height);
+            pos = new Vector2(50, 400); //Start position
+            vel = new Vector2(2, 3); //riktning
+            ball = new Ball(ballTex, pos, vel, radius,boundary);
         }
 
         public Texture2D CreateCircleTexture(int radius, Color color)
@@ -105,6 +108,7 @@ namespace Seminarium2
                 Exit();
 
             car.Update(gameTime);
+            ball.Update(gameTime);
 
             base.Update(gameTime);
         }
