@@ -14,8 +14,9 @@ namespace Seminarium2
         private Vector2 velocity;
         private Vector2 position;
         private float radius;
+        private float vinkel;
 
-        public Ball(Vector2 position, Texture2D texture, Vector2 velocity, float radius)
+        public Ball( Texture2D texture, Vector2 position, Vector2 velocity, float radius)
         {
             this.position = position;
             this.texture = texture;

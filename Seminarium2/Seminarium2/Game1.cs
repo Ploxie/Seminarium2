@@ -11,9 +11,13 @@ namespace Seminarium2
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Car car;
+        Ball ball;
         Texture2D tank;
         Vector2 pos, vel;
 
+        Texture2D ballTex;
+
+        float radius;
 
 
         public Game1()
@@ -57,6 +61,42 @@ namespace Seminarium2
             };
 
             car = new Car(tank, Window, new Vector2(100, 250), circlePath);
+
+
+            radius = 50.0f;
+            ballTex = CreateCircleTexture((int)radius, Color.White);
+            pos = new Vector2(50, 50); //Start position
+            vel = new Vector2(200, 3); //riktning
+            ball = new Ball(ballTex, pos, vel, radius);
+        }
+
+        public Texture2D CreateCircleTexture(int radius, Color color)
+        {
+            Texture2D texture = new Texture2D(GraphicsDevice, radius, radius);
+            Color[] colorData = new Color[radius * radius];
+
+            float diameter = radius / 2f;
+            float diameterSquared = diameter * diameter;
+
+            for (int x = 0; x < radius; x++)
+            {
+                for (int y = 0; y < radius; y++)
+                {
+                    int index = x * radius + y;
+                    Vector2 pos = new Vector2(x - diameter, y - diameter);
+                    if (pos.LengthSquared() <= diameterSquared)
+                    {
+                        colorData[index] = color;
+                    }
+                    else
+                    {
+                        colorData[index] = Color.Transparent;
+                    }
+                }
+            }
+
+            texture.SetData(colorData);
+            return texture;
         }
 
         protected override void Update(GameTime gameTime)
