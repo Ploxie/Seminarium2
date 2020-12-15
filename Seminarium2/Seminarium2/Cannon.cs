@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,8 @@ namespace Seminarium2
     class Cannon
     {
         MouseState oldMouseState, currentMouseState;
-
+        Vector2 ballVelocity;
+        Vector2 position;
         public Cannon()
         {
 
@@ -24,7 +27,11 @@ namespace Seminarium2
             if(oldMouseState.LeftButton==ButtonState.Released && currentMouseState.LeftButton==ButtonState.Pressed)
             {
 
+                ballVelocity.X = Mouse.GetState().Position.X - position.X;
+                ballVelocity.Y = Mouse.GetState().Position.Y - position.Y;
             }
+
+
         }
 
     }
