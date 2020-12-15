@@ -14,18 +14,17 @@ namespace Seminarium2
         private Vector2 velocity;
         private Vector2 position;
         private float radius;
-        private float vinkel;
         int bX;
         int bY;
         Rectangle hitBox;
 
 
-        public Ball( Texture2D texture, Vector2 position, Vector2 velocity, float radius, Point boundary)
+        public Ball(Texture2D texture, Vector2 position, Vector2 velocity, float radius, Point boundary)
         {
             this.position = position;
             this.texture = texture;
             this.velocity = velocity;
-            this.radius = texture.Height/2;
+            this.radius = texture.Height / 2;
             this.bX = boundary.X;
             this.bY = boundary.Y;
             this.hitBox = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
@@ -51,12 +50,16 @@ namespace Seminarium2
         {
             sb.Draw(texture, position, null, Color.White, 0, new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), 1, SpriteEffects.None, 0);
         }
-        
+
         public Vector2 Position
         {
             get
             {
                 return position;
+            }
+            set
+            {
+                position = value;
             }
         }
 
@@ -65,6 +68,10 @@ namespace Seminarium2
             get
             {
                 return velocity;
+            }
+            set
+            {
+                velocity = value;
             }
         }
 

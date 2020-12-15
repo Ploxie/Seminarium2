@@ -17,7 +17,9 @@ namespace Seminarium2
         Point boundary;
         int bx, by;
 
+        float velx, vely;
 
+        MouseState ms;
 
         Texture2D lineTexture;
 
@@ -33,8 +35,8 @@ namespace Seminarium2
         Ball ball;
         float radius;
 
-
-        float angle;
+        Vector2 ballVel;
+        float angle, ballAngle;
 
         public Game1()
         {
@@ -43,6 +45,7 @@ namespace Seminarium2
             bx = graphics.PreferredBackBufferWidth = 800;
             by = graphics.PreferredBackBufferHeight = 600;
             IsMouseVisible = true;
+            ms = Mouse.GetState();
         }
 
         protected override void Initialize()
@@ -89,9 +92,13 @@ namespace Seminarium2
             ballTex = CreateCircleTexture((int)radius, Color.White);
 
             boundary = new Point(bx - ballTex.Width, by - ballTex.Height);
-            pos = new Vector2(50, 400); //Start position
-            vel = new Vector2(2, 3); //riktning
-            ball = new Ball(ballTex, pos, vel, radius, boundary);
+            pos = new Vector2(50, 480); //Start position
+            ballAngle = 30;
+            velx = (float)Math.Cos(ballAngle) * ballVel.X;
+            vely = (float)Math.Sin(ballAngle) * ballVel.Y;
+            vel = new Vector2(velx, vely); //riktning
+
+            ball = new Ball(ballTex, pos, Vector2.Zero, radius, boundary);
 
         }
 
@@ -160,6 +167,9 @@ namespace Seminarium2
 
             car.Update(gameTime);
             ball.Update(gameTime);
+
+            if ((ms.LeftButton == ButtonState.Pressed))
+                ball.Velocity = new Vector2(3, 3);
 
             if (Vector2.Distance(ball.Position, car.Position) < (ball.Radius + car.Radius))
             {
