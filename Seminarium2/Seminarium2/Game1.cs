@@ -160,11 +160,12 @@ namespace Seminarium2
 
             car.Update(gameTime);
             ball.Update(gameTime);
+
             if (Vector2.Distance(ball.Position, car.Position) < (ball.Radius + car.Radius))
             {
                 Console.WriteLine("Collision: Ball Position:" + ball.Position + " | Car Position" + car.Position + " Time: " + gameTime.TotalGameTime.TotalSeconds);
-
             }
+
             base.Update(gameTime);
         }
 
