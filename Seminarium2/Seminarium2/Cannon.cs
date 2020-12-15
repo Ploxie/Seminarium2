@@ -14,7 +14,7 @@ namespace Seminarium2
         MouseState oldMouseState, currentMouseState;
         Vector2 ballVelocity;
         Vector2 position;
-        public Cannon()
+        public Cannon(Texture2D texture, Vector2 position, Vector2 velocity, float radius, Point boundary)
         {
 
         }
