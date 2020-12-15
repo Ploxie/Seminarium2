@@ -18,7 +18,7 @@ namespace Seminarium2
 
         Vector2 pos;
         Point boundary;
-       
+
         Ball ball;
         Car car;
 
@@ -37,7 +37,7 @@ namespace Seminarium2
                 return mousePos;
             }
         }
-    
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -83,9 +83,9 @@ namespace Seminarium2
             /*----------------------------------CAR--------------------------------*/
             float carSpeed = 20.0f;
 
-            car = new Car(tank, Window, new Vector2(300, 250),carSpeed ,WavyPath, tank.Height / 2);
+            car = new Car(tank, Window, new Vector2(300, 250), carSpeed, WavyPath, tank.Height / 2);
 
-           /*-----------------------------------BALL----------------------------*/
+            /*-----------------------------------BALL----------------------------*/
             radius = 50.0f;
             ballTex = CreateCircleTexture((int)radius, Color.White);
 
@@ -176,7 +176,7 @@ namespace Seminarium2
 
             if (Vector2.Distance(ball.Position, car.Position) < (ball.Radius + car.Radius)) //kollision
             {
-                Vector2 delta = ball.Position - car.Position; 
+                Vector2 delta = ball.Position - car.Position;
 
                 Vector2 normal = delta;
                 normal.Normalize(); //normaliserar delta                        
