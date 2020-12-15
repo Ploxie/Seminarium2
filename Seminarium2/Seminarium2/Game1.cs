@@ -95,7 +95,7 @@ namespace Seminarium2
 
             boundary = new Point(bx - ballTex.Width, by - ballTex.Height);
             pos = new Vector2(radius * 0.5f, Window.ClientBounds.Height-(radius * 0.5f)); //Start position
-            ballAngle = 30;
+            //ballAngle = 30;
             velx = (float)Math.Cos(ballAngle) * ballVel.X;
             vely = (float)Math.Sin(ballAngle) * ballVel.Y;
             vel = new Vector2(velx, vely); //riktning
