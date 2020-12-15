@@ -36,8 +36,7 @@ namespace Seminarium2
 
             tank = Content.Load<Texture2D>("tank");
 
-
-            Func<Vector2, GameTime, Vector2> carPath = (position, gameTime) => 
+            Func<Vector2, GameTime, Vector2> carPath = (position, gameTime) => //del 2
             {
                 float amplitude = 50.0f;
                 float frequency = 0.1f;
@@ -47,22 +46,17 @@ namespace Seminarium2
                 return position + new Vector2(t * 2.0f, (float)((1 + Math.Cos(t * frequency)) * Math.Sin(t * frequency)) * amplitude);
             };
 
-            Func<Vector2, GameTime, Vector2> circlePath = (position, gameTime) =>
+            Func<Vector2, GameTime, Vector2> circlePath = (position, gameTime) => // del 1
             {
                 float angle = MathHelper.ToRadians(360) * ((float)gameTime.TotalGameTime.TotalMilliseconds / 1000.0f);
                 float radius = 50.0f;
-                //return new Vector2(position.X, position.Y);
 
                 Vector2 circle = new Vector2((float)Math.Cos(angle) * radius, (float)Math.Sin(angle) * radius);
 
                 return position + circle;
             };
 
-            car = new Car(tank, Window, new Vector2(0, 250), carPath);
-        }
-
-        protected override void UnloadContent()
-        {
+            car = new Car(tank, Window, new Vector2(100, 250), circlePath);
         }
 
         protected override void Update(GameTime gameTime)
