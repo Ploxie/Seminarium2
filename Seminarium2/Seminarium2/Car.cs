@@ -19,18 +19,19 @@ namespace Seminarium2
 
         float carRotation = 0;
         float ballHitbox;
-        int speed;
+        float speed;
 
         private Func<Vector2, GameTime, float, Vector2> carPath;
 
         private Rectangle bounds;
 
-        public Car(Texture2D car, GameWindow window, Vector2 position, Func<Vector2, GameTime,float, Vector2> carPath,float ballHitbox)
+        public Car(Texture2D car, GameWindow window, Vector2 position, float speed,Func<Vector2, GameTime,float, Vector2> carPath,float ballHitbox)
         {
             this.car = car;
 
             this.position = position;
-            this.startPosition = position;
+            startPosition = position;
+            this.speed = speed;
             this.ballHitbox = ballHitbox;
             this.carPath = carPath;
 
@@ -42,11 +43,7 @@ namespace Seminarium2
 
         public void Update(GameTime gameTime)
         {
-            //velocity = carPath(position, gameTime);
-
-            //carRotation += (float)gameTime.ElapsedGameTime.TotalSeconds * speed; //?
-
-            Vector2 newPos = carPath(startPosition, gameTime, 10.0f);
+            Vector2 newPos = carPath(startPosition, gameTime, speed);
             velocity = (newPos - position);
 
             carRotation = (float)Math.Atan2(position.Y - newPos.Y, position.X - newPos.X) + MathHelper.ToRadians(180);
@@ -57,7 +54,6 @@ namespace Seminarium2
 
         public void Draw(SpriteBatch spriteBatch)
         {
-
             spriteBatch.Draw(car, position, null, Color.White, carRotation, carOrigin, 1, SpriteEffects.None, 0);
             //spriteBatch.Draw(car, startPosition, null, Color.Red, 0.0f, carOrigin, 1, SpriteEffects.None, 0);
         }
@@ -75,6 +71,10 @@ namespace Seminarium2
             get
             {
                 return velocity;
+            }
+            set
+            {
+                velocity = value;
             }
         }
 

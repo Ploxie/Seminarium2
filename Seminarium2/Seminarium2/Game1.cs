@@ -11,19 +11,23 @@ namespace Seminarium2
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Car car;
+
         Texture2D tank;
-        Vector2 pos, vel;
-        Point boundary;
-        int bx, by;
-
-        float velx, vely;
-
-        MouseState ms;
-
+        Texture2D ballTex;
         Texture2D lineTexture;
 
+        Vector2 pos;
+        Point boundary;
+       
+        Ball ball;
+        Car car;
+
         bool hasShot;
+
+        float radius;
+        float angle;
+
+        int bx, by;
 
         private static Vector2 mousePos;
         public static Vector2 MousePos
@@ -33,13 +37,7 @@ namespace Seminarium2
                 return mousePos;
             }
         }
-        Texture2D ballTex;
-        Ball ball;
-        float radius;
-
-        Vector2 ballVel;
-        float angle, ballAngle;
-
+    
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -47,7 +45,6 @@ namespace Seminarium2
             bx = graphics.PreferredBackBufferWidth = 800;
             by = graphics.PreferredBackBufferHeight = 600;
             IsMouseVisible = true;
-            ms = Mouse.GetState();
         }
 
         protected override void Initialize()
@@ -62,19 +59,6 @@ namespace Seminarium2
 
             tank = Content.Load<Texture2D>("tank");
 
-
-            ballTex = Content.Load<Texture2D>("Ball");
-            IsMouseVisible = true;
-            Func<Vector2, GameTime, float, Vector2> carPath = (position, gameTime, speed) => //del 2
-            {
-                float amplitude = 50.0f;
-                float frequency = 0.1f;
-
-                float t = speed * ((float)gameTime.TotalGameTime.TotalSeconds);
-
-                return position + new Vector2(t, (float)((1 + Math.Cos(t * frequency)) * Math.Sin(t * frequency)) * amplitude);
-            };
-
             Func<Vector2, GameTime, float, Vector2> circlePath = (position, gameTime, speed) => // del 1
             {
 
@@ -86,21 +70,32 @@ namespace Seminarium2
                 return position + circle;
             };
 
-            car = new Car(tank, Window, new Vector2(300, 250), circlePath, tank.Height / 2);
+            Func<Vector2, GameTime, float, Vector2> WavyPath = (position, gameTime, speed) => //del 2
+            {
+                float amplitude = 25.0f;
+                float frequency = 0.5f;
 
-            lineTexture = CreateLineTexture(3, 100, Color.Black);
+                float t = speed * ((float)gameTime.TotalGameTime.TotalSeconds);
 
+                return position + new Vector2(t, (float)((1 + Math.Cos(t * frequency)) * Math.Sin(t * frequency)) * amplitude);
+            };
+
+            /*----------------------------------CAR--------------------------------*/
+            float carSpeed = 20.0f;
+
+            car = new Car(tank, Window, new Vector2(300, 250),carSpeed ,WavyPath, tank.Height / 2);
+
+           /*-----------------------------------BALL----------------------------*/
             radius = 50.0f;
             ballTex = CreateCircleTexture((int)radius, Color.White);
 
             boundary = new Point(bx - ballTex.Width, by - ballTex.Height);
-            pos = new Vector2(radius * 0.5f, Window.ClientBounds.Height-(radius * 0.5f)); //Start position
-            //ballAngle = 30;
-            velx = (float)Math.Cos(ballAngle) * ballVel.X;
-            vely = (float)Math.Sin(ballAngle) * ballVel.Y;
-            vel = new Vector2(velx, vely); //riktning
+            pos = new Vector2(radius * 0.5f, Window.ClientBounds.Height - (radius * 0.5f)); //Start position
+            float ballSpeed = 300.0f;
+            ball = new Ball(ballTex, pos, ballSpeed, radius, boundary);
 
-            ball = new Ball(ballTex, pos, Vector2.Zero, 300.0f, boundary);
+            /*---------------------------Line------------------------*/
+            lineTexture = CreateLineTexture(3, 100, Color.Black);
 
         }
 
@@ -164,22 +159,35 @@ namespace Seminarium2
 
             Vector2 bottomLeftCorner = new Vector2(0, Window.ClientBounds.Height);
             Vector2 mousePosition = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
-            Vector2 direction = mousePosition - bottomLeftCorner;
+
+            Vector2 direction = mousePosition - bottomLeftCorner; //normalisera direction
             direction.Normalize();
 
-            angle = (float)Math.Atan2(mousePosition.Y - bottomLeftCorner.Y, mousePosition.X - bottomLeftCorner.X) + MathHelper.ToRadians(-90);
+            angle = (float)Math.Atan2(mousePosition.Y - bottomLeftCorner.Y, mousePosition.X - bottomLeftCorner.X) + MathHelper.ToRadians(-90); // shooting angle
 
             car.Update(gameTime);
             ball.Update(gameTime);
 
-            if (Mouse.GetState().LeftButton == ButtonState.Pressed && !hasShot)
+            if (Mouse.GetState().LeftButton == ButtonState.Pressed && !hasShot) //Skjuta
             {
                 ball.Velocity = direction;
                 hasShot = true;
             }
 
-            if (Vector2.Distance(ball.Position, car.Position) < (ball.Radius + car.Radius))
+            if (Vector2.Distance(ball.Position, car.Position) < (ball.Radius + car.Radius)) //kollision
             {
+                Vector2 delta = ball.Position - car.Position; 
+
+                Vector2 normal = delta;
+                normal.Normalize(); //normaliserar delta                        
+
+                /*normal komponenter*/
+                Vector2 velDiff1 = Vector2.Dot(ball.Velocity, normal) * normal;
+                Vector2 velDiff2 = Vector2.Dot(car.Velocity, normal) * normal;
+
+                /* nya riktning efter kollision */
+                ball.Velocity += -velDiff1 + velDiff2;
+
                 Console.WriteLine("Collision: Ball Position:" + ball.Position + " | Car Position" + car.Position + " Time: " + gameTime.TotalGameTime.TotalSeconds);
             }
 
@@ -195,7 +203,7 @@ namespace Seminarium2
             car.Draw(spriteBatch);
             ball.Draw(spriteBatch);
 
-            if(!hasShot)
+            if (!hasShot)
             {
                 spriteBatch.Draw(lineTexture, new Rectangle((int)ball.Position.X, (int)ball.Position.Y, 3, 100), null, Color.White, angle, new Vector2(0, 0f), SpriteEffects.None, 0.0f);
             }

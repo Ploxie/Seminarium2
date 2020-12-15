@@ -17,24 +17,26 @@ namespace Seminarium2
         private float speed;
         int bX;
         int bY;
-        Rectangle hitBox;
 
 
-        public Ball(Texture2D texture, Vector2 position, Vector2 velocity, float speed, Point boundary)
-        {
-            this.position = position;
+
+        public Ball(Texture2D texture, Vector2 position, float speed, float radius, Point boundary)
+        {          
             this.texture = texture;
-            this.velocity = velocity;
-            this.radius = texture.Height / 2;
+            this.position = position;
             this.speed = speed;
+            this.radius = texture.Height / 2; 
             this.bX = boundary.X;
-            this.bY = boundary.Y;
-            this.hitBox = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
+            this.bY = boundary.Y;           
         }
 
         public void Update(GameTime gameTime)
         {
-            position += velocity * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if(velocity.Length() == 0)
+            {
+                return;
+            }
+            position += Vector2.Normalize(velocity) * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (position.X - radius <= 0 || position.X - radius >= bX)
             {
@@ -52,7 +54,6 @@ namespace Seminarium2
         {
             sb.Draw(texture, position, null, Color.White, 0, new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), 1, SpriteEffects.None, 0);
         }
-
 
         public Vector2 Position
         {
