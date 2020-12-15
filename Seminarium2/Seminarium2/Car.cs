@@ -59,7 +59,7 @@ namespace Seminarium2
         {
 
             spriteBatch.Draw(car, position, null, Color.White, carRotation, carOrigin, 1, SpriteEffects.None, 0);
-            spriteBatch.Draw(car, startPosition, null, Color.Red, 0.0f, carOrigin, 1, SpriteEffects.None, 0);
+            //spriteBatch.Draw(car, startPosition, null, Color.Red, 0.0f, carOrigin, 1, SpriteEffects.None, 0);
         }
 
         public Vector2 Position

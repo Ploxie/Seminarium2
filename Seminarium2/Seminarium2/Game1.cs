@@ -70,9 +70,9 @@ namespace Seminarium2
                 float amplitude = 50.0f;
                 float frequency = 0.1f;
 
-                float t = ((float)gameTime.TotalGameTime.TotalMilliseconds / 10.0f);
+                float t = speed * ((float)gameTime.TotalGameTime.TotalSeconds);
 
-                return position + new Vector2(t * 2.0f, (float)((1 + Math.Cos(t * frequency)) * Math.Sin(t * frequency)) * amplitude);
+                return position + new Vector2(t, (float)((1 + Math.Cos(t * frequency)) * Math.Sin(t * frequency)) * amplitude);
             };
 
             Func<Vector2, GameTime, float, Vector2> circlePath = (position, gameTime, speed) => // del 1
