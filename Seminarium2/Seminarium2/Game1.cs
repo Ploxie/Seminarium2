@@ -18,7 +18,7 @@ namespace Seminarium2
         int bx, by;
 
 
-                
+
         Texture2D lineTexture;
 
         private static Vector2 mousePos;
@@ -81,11 +81,9 @@ namespace Seminarium2
                 return position + circle;
             };
 
-
-            car = new Car(tank, Window, new Vector2(300, 250), circlePath);
+            car = new Car(tank, Window, new Vector2(300, 250), circlePath, tank.Height / 2);
 
             lineTexture = CreateLineTexture(3, 100, Color.Black);
-
 
             radius = 50.0f;
             ballTex = CreateCircleTexture((int)radius, Color.White);
@@ -93,7 +91,7 @@ namespace Seminarium2
             boundary = new Point(bx - ballTex.Width, by - ballTex.Height);
             pos = new Vector2(50, 400); //Start position
             vel = new Vector2(2, 3); //riktning
-            ball = new Ball(ballTex, pos, vel, radius,boundary);
+            ball = new Ball(ballTex, pos, vel, radius, boundary);
 
         }
 
@@ -105,13 +103,13 @@ namespace Seminarium2
             float diameter = radius / 2f;
             float diameterSquared = diameter * diameter;
 
-            for(int x=0; x < radius; x++)
+            for (int x = 0; x < radius; x++)
             {
-                for(int y = 0; y<radius; y++)
+                for (int y = 0; y < radius; y++)
                 {
                     int index = x * radius + y;
                     Vector2 pos = new Vector2(x - diameter, y - diameter);
-                    if(pos.LengthSquared() <= diameterSquared)
+                    if (pos.LengthSquared() <= diameterSquared)
                     {
                         colorData[index] = color;
                     }
@@ -125,7 +123,6 @@ namespace Seminarium2
             texture.SetData(colorData);
             return texture;
         }
-        
 
         public Texture2D CreateLineTexture(int width, int height, Color color)
         {
@@ -133,7 +130,7 @@ namespace Seminarium2
 
             Color[] colors = new Color[width * height];
 
-            for(int i = 0; i < width * height; i++)
+            for (int i = 0; i < width * height; i++)
             {
                 colors[i] = Color.Transparent;
             }
@@ -156,7 +153,6 @@ namespace Seminarium2
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-
             Vector2 bottomLeftCorner = new Vector2(0, Window.ClientBounds.Height);
             Vector2 mousePosition = new Vector2(Mouse.GetState().X, Mouse.GetState().Y);
 
@@ -164,7 +160,11 @@ namespace Seminarium2
 
             car.Update(gameTime);
             ball.Update(gameTime);
+            if (Vector2.Distance(ball.Position, car.Position) < (ball.Radius + car.Radius))
+            {
+                Console.WriteLine("Collision: Ball Position:" + ball.Position + " | Car Position" + car.Position + " Time: " + gameTime.TotalGameTime.TotalSeconds);
 
+            }
             base.Update(gameTime);
         }
 
@@ -177,7 +177,7 @@ namespace Seminarium2
             car.Draw(spriteBatch);
             ball.Draw(spriteBatch);
 
-            spriteBatch.Draw(lineTexture, new Rectangle(1, Window.ClientBounds.Height+1, 3, 100), null, Color.White, angle, new Vector2(0, 0f), SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(lineTexture, new Rectangle(1, Window.ClientBounds.Height + 1, 3, 100), null, Color.White, angle, new Vector2(0, 0f), SpriteEffects.None, 0.0f);
 
             spriteBatch.End();
 
