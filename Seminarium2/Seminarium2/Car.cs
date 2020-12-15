@@ -21,11 +21,11 @@ namespace Seminarium2
 
         int speed;
 
-        private Func<Vector2, GameTime, Vector2> carPath;
+        private Func<Vector2, GameTime, float, Vector2> carPath;
 
         private Rectangle bounds;
 
-        public Car(Texture2D car, GameWindow window, Vector2 position, Func<Vector2, GameTime, Vector2> carPath)
+        public Car(Texture2D car, GameWindow window, Vector2 position, Func<Vector2, GameTime,float, Vector2> carPath)
         {
             this.car = car;
 
@@ -45,8 +45,9 @@ namespace Seminarium2
             //velocity = carPath(position, gameTime);
 
             //carRotation += (float)gameTime.ElapsedGameTime.TotalSeconds * speed; //?
-            Vector2 newPos = carPath(startPosition, gameTime);
-            velocity = newPos - position;
+
+            Vector2 newPos = carPath(startPosition, gameTime, 10.0f);
+            velocity = (newPos - position);
 
             carRotation = (float)Math.Atan2(position.Y - newPos.Y, position.X - newPos.X) + MathHelper.ToRadians(180);
 
