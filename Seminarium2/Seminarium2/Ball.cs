@@ -24,6 +24,11 @@ namespace Seminarium2
             this.radius = radius;
         }
 
+        public void Draw(SpriteBatch sb)
+        {
+            sb.Draw(texture, position, Color.White);
+        }
+
         public Vector2 Position
         {
             get
