@@ -12,16 +12,25 @@ namespace Seminarium2
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Car car;
-        Ball ball;
         Texture2D tank;
         Vector2 pos, vel;
         Point boundary;
         int bx, by;
 
 
-        Texture2D ballTex;
+                
         Texture2D lineTexture;
 
+        private static Vector2 mousePos;
+        public static Vector2 MousePos
+        {
+            get
+            {
+                return mousePos;
+            }
+        }
+        Texture2D ballTex;
+        Ball ball;
         float radius;
 
 
@@ -48,18 +57,22 @@ namespace Seminarium2
 
             tank = Content.Load<Texture2D>("tank");
 
-            Func<Vector2, GameTime,float, Vector2> carPath = (position, gameTime, speed) => 
+
+            ballTex = Content.Load<Texture2D>("Ball");
+            IsMouseVisible = true;
+            Func<Vector2, GameTime, float, Vector2> carPath = (position, gameTime, speed) => //del 2
             {
                 float amplitude = 50.0f;
                 float frequency = 0.1f;
 
-                float t = speed * ((float)gameTime.TotalGameTime.TotalSeconds);
+                float t = ((float)gameTime.TotalGameTime.TotalMilliseconds / 10.0f);
 
-                return position + new Vector2(t, (float)((1 + Math.Cos(t * frequency)) * Math.Sin(t * frequency)) * amplitude);
+                return position + new Vector2(t * 2.0f, (float)((1 + Math.Cos(t * frequency)) * Math.Sin(t * frequency)) * amplitude);
             };
 
-            Func<Vector2, GameTime,float, Vector2> circlePath = (position, gameTime, speed) =>
+            Func<Vector2, GameTime, float, Vector2> circlePath = (position, gameTime, speed) => // del 1
             {
+
                 float angle = MathHelper.ToRadians(10 * speed) * ((float)gameTime.TotalGameTime.TotalMilliseconds / 1000.0f);
                 float radius = 100.0f;
 
@@ -71,16 +84,17 @@ namespace Seminarium2
 
             car = new Car(tank, Window, new Vector2(300, 250), circlePath);
 
-
             lineTexture = CreateLineTexture(3, 100, Color.Black);
 
 
             radius = 50.0f;
             ballTex = CreateCircleTexture((int)radius, Color.White);
+
             boundary = new Point(bx - ballTex.Width, by - ballTex.Height);
             pos = new Vector2(50, 400); //Start position
             vel = new Vector2(2, 3); //riktning
             ball = new Ball(ballTex, pos, vel, radius,boundary);
+
         }
 
         public Texture2D CreateCircleTexture(int radius, Color color)
@@ -91,13 +105,13 @@ namespace Seminarium2
             float diameter = radius / 2f;
             float diameterSquared = diameter * diameter;
 
-            for (int x = 0; x < radius; x++)
+            for(int x=0; x < radius; x++)
             {
-                for (int y = 0; y < radius; y++)
+                for(int y = 0; y<radius; y++)
                 {
                     int index = x * radius + y;
                     Vector2 pos = new Vector2(x - diameter, y - diameter);
-                    if (pos.LengthSquared() <= diameterSquared)
+                    if(pos.LengthSquared() <= diameterSquared)
                     {
                         colorData[index] = color;
                     }
@@ -111,6 +125,7 @@ namespace Seminarium2
             texture.SetData(colorData);
             return texture;
         }
+        
 
         public Texture2D CreateLineTexture(int width, int height, Color color)
         {

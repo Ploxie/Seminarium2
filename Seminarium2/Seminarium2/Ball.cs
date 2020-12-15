@@ -46,11 +46,12 @@ namespace Seminarium2
             }
         }
 
+
         public void Draw(SpriteBatch sb)
         {
             sb.Draw(texture, position, null, Color.White, 0, new Vector2(texture.Width / 2.0f, texture.Height / 2.0f), 1, SpriteEffects.None, 0);
         }
-
+        
         public Vector2 Position
         {
             get
@@ -74,6 +75,14 @@ namespace Seminarium2
                 return radius;
             }
         }
+
+
+        public void Update()
+        {
+            position += velocity;
+
+        }
+
 
     }
 }
