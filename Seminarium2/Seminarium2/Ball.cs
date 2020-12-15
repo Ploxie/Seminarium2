@@ -24,20 +24,12 @@ namespace Seminarium2
             this.radius = radius;
         }
 
-=======
-        
 
-        private Texture2D texture;
-        private Vector2 velocity;
-        private float radius;
-        
-        public Ball(Vector2 position, Vector2 velocity, float radius)
+        public void Draw(SpriteBatch sb)
         {
-            this.position = position;
-            this.velocity = velocity;
-            this.radius = radius;
+            sb.Draw(texture, position, Color.White);
         }
->>>>>>> Stashed changes
+        
         public Vector2 Position
         {
             get
@@ -62,18 +54,13 @@ namespace Seminarium2
             }
         }
 
-<<<<<<< Updated upstream
-=======
+
         public void Update()
         {
             position += velocity;
 
         }
 
-        public void Draw(SpriteBatch spritebatch)
-        {
-            //spritebatch.Draw();
-        }
->>>>>>> Stashed changes
+
     }
 }

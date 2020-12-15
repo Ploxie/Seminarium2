@@ -23,7 +23,8 @@ namespace Seminarium2
                 return mousePos;
             }
         }
-        Texture2D ball;
+        Texture2D ballTex;
+        Ball ball;
         float radius;
 
         public Game1()
@@ -45,14 +46,11 @@ namespace Seminarium2
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             tank = Content.Load<Texture2D>("tank");
-<<<<<<< Updated upstream
 
-            Func<Vector2, GameTime, Vector2> carPath = (position, gameTime) => //del 2
-=======
-            ball = Content.Load<Texture2D>("Ball");
+
+            ballTex = Content.Load<Texture2D>("Ball");
             IsMouseVisible = true;
-            Func<Vector2, GameTime, Vector2> carPath = (position, gameTime) => // Velocity
->>>>>>> Stashed changes
+            Func<Vector2, GameTime, float, Vector2> carPath = (position, gameTime, speed) => //del 2
             {
                 float amplitude = 50.0f;
                 float frequency = 0.1f;
@@ -62,7 +60,7 @@ namespace Seminarium2
                 return position + new Vector2(t * 2.0f, (float)((1 + Math.Cos(t * frequency)) * Math.Sin(t * frequency)) * amplitude);
             };
 
-            Func<Vector2, GameTime, Vector2> circlePath = (position, gameTime) => // del 1
+            Func<Vector2, GameTime, float, Vector2> circlePath = (position, gameTime, speed) => // del 1
             {
                 float angle = MathHelper.ToRadians(360) * ((float)gameTime.TotalGameTime.TotalMilliseconds / 1000.0f);
                 float radius = 50.0f;
@@ -72,10 +70,17 @@ namespace Seminarium2
                 return position + circle;
             };
 
-<<<<<<< Updated upstream
+
             car = new Car(tank, Window, new Vector2(100, 250), circlePath);
-=======
-            car = new Car(tank, new Vector2(350, 250), new Vector2(0,0), circlePath);
+
+
+
+            radius = 50.0f;
+            ballTex = CreateCircleTexture((int)radius, Color.White);
+            pos = new Vector2(0, 400); //Start position
+            vel = new Vector2(200, 3); //riktning
+            ball = new Ball(ballTex, pos, vel, radius);
+
         }
 
         public Texture2D CreateCircleTexture(int radius, Color color)
@@ -106,11 +111,7 @@ namespace Seminarium2
             texture.SetData(colorData);
             return texture;
         }
-
-        protected override void UnloadContent()
-        {
->>>>>>> Stashed changes
-        }
+        
 
         protected override void Update(GameTime gameTime)
         {
@@ -129,6 +130,7 @@ namespace Seminarium2
             spriteBatch.Begin();
 
             car.Draw(spriteBatch);
+            ball.Draw(spriteBatch);
 
             spriteBatch.End();
 
